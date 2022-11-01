@@ -15,7 +15,14 @@ const initialState: AuthState = {
   nombre: ''
 }
 
-type AuthAction = { type: 'logout'};
+type LoginPayload = {
+  username: string;
+  nombre: string;
+}
+
+type AuthAction = 
+    | { type: 'logout'}
+    | { type: 'login', payload: LoginPayload  };
 
 const authReducer = (state: AuthState, action:AuthAction): AuthState => {
   switch (action.type) {
@@ -26,6 +33,15 @@ const authReducer = (state: AuthState, action:AuthAction): AuthState => {
         nombre: '',
         username: ''
       }
+
+    case 'login':
+      const { nombre, username } = action.payload;
+      return {
+        validando: false,
+        token: 'ABC123',
+        nombre,
+        username
+      }
   
     default:
       return state;
@@ -35,15 +51,22 @@ const authReducer = (state: AuthState, action:AuthAction): AuthState => {
 
 export const Login = () => {
 
-  const [state, dispatch] = useReducer(authReducer, initialState);
+  const [{ validando, token, nombre }, dispatch] = useReducer(authReducer, initialState);
 
   useEffect(() => {
     setTimeout(() => {
       dispatch({ type: 'logout' })
     }, 1500);
   }, []);
+
+  const login = () => {
+    dispatch({ type: 'login', payload:{
+      nombre: 'Jhon',
+      username: 'Casual'
+    }})
+  }
   
-  if (state.validando) {
+  if (validando) {
     return(
       <>
         <h3>Login</h3>
@@ -60,17 +83,20 @@ export const Login = () => {
   return (
     <>
         <h3>Login</h3>
+
+        {
+          ( token )
+              ? <div className='alert alert-success'> Autenticado como: { nombre } </div>
+              : <div className='alert alert-danger'> No autenticado </div>
+        }
+
+        {
+          ( token )
+              ? <button className='btn btn-danger'> Logout </button>
+              : <button className='btn btn-primary' onClick={ login }> Login </button>
+        }
         
-        <div className='alert alert-danger'>
-            No autenticado
-        </div>
 
-        <div className='alert alert-success'>
-            Autenticado
-        </div>
-
-        <button className='btn btn-primary'> Login </button> &nbsp;
-        <button className='btn btn-danger'> Logut </button>
     </>
   )
 }
