@@ -1,4 +1,5 @@
 import React from 'react'
+import { Formularios } from './components/Formularios';
 import { Usuarios } from './components/Usuarios';
 // import { Login } from './components/Login';
 // import { ObjetosLiterales } from './typescript/ObjetosLiterales';
@@ -18,7 +19,8 @@ const App = () => {
       {/* <Contador/> */}
       {/* < ContadorConHook /> */}
       {/* <Login/> */}
-      <Usuarios/>
+      {/* <Usuarios/> */}
+      <Formularios/>
     </div>
   )
 }
